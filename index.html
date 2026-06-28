@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple World Cup Predictor</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css" integrity="sha384-vlBdW0r3AcZO/HboRPznQNowvexd3fY8qHOWkBi5q7KGgqJ+F48+DceybYmrVbmB" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css?t=6">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js" integrity="sha384-AtrdNsnxl/75rvBneBVH7DtOvCxSVahR2zWqle1coBKd8DEmLoviqNeJSx64gNAs" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js" integrity="sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz" crossorigin="anonymous" onload="renderMathInElement(document.body, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }, { left: '\\(', right: '\\)', display: false }, { left: '\\[', right: '\\]', display: true }], throwOnError: false });"></script>
+    </head>
+
+    <body>
+        <div class="parent-container-container">
+            <div class="parent-container">
+                <header class="page-header">
+                    <h1>Simple World Cup Predictor</h1>
+                </header>
+
+                <div class="app-layout">
+                    <button class="sidebar-overlay" type="button" aria-label="Close sidebar"></button>
+
+                    <aside class="sidebar" id="sidebar" aria-label="Sidebar">
+                        <button class="close-sidebar-button" type="button" aria-label="Close sidebar">&#10006;</button>
+                        <div class="sliders-container" id="strength-sliders"></div>
+                        <button class="reset-strengths-button" id="reset-strengths-button" type="button">
+                            Reset Strengths
+                        </button>
+                        <p>
+                            The default strengths were assigned by a large language model (ChatGPT 5.5). You can
+                            see the exact prompt I used <a href="https://chatgpt.com/share/6a40e365-cef0-83eb-9cff-8321542c43b2">here</a>. Of course, these may not reflect reality well,
+                            but are likely a better source than some arbitrary values.
+                        </p>
+                    </aside>
+
+                    <main class="page-content">
+                        <p style="margin-top: 0">
+                            This tool lets you simulate the knockout stage of the 2026 FIFA World Cup statistically.
+                            I also made <a href="https://youtu.be/BjYtM6TFlbc">a YouTube video</a> to explain this tool.
+                            You can assign
+                            a strength value (from $0.1$ to $10.0$) to each team. In a given matchup, the probability that
+                            team $A$ beats team $B$ is $$\mathbb{P}(A\text{ beats } B) = \frac{\text{str}(A)}{\text{str}(A) + \text{str}(B)}$$
+                        </p>
+
+                        <button class="open-sidebar-button" type="button" aria-controls="sidebar" aria-expanded="false">
+                            Edit Strengths
+                        </button>
+
+                        <p>
+                            You can edit these strengths and see how the corresponding win probabilities change.
+                            Here is the bracket that would result if the stronger team beat the weaker team every time:
+                        </p>
+
+                        <div class="svg-container">
+                            <svg id="simulated-tournament-svg" aria-label="Simulated tournament bracket"></svg>
+                        </div>
+
+                        <label class="fixed-games-control" id="fixed-games-control" hidden>
+                            <input id="apply-fixed-game-outcomes-checkbox" type="checkbox">
+                            Apply already-played games (highlighted with a black border).
+                        </label>
+
+                        <p>
+                            By playing around with the strengths, you may notice that the
+                            placement (e.g. which side you start on) heavily influences a team's
+                            chance of advancing; teams with lower strength may have a higher likelihood
+                            of winning than high-strength teams.
+                        </p>
+
+                        <div class="simulation-chart-container">
+                            <canvas id="simulation-results-chart"></canvas>
+                        </div>
+
+                        <p>
+                            Here is a full list of all participating teams together with their probabilities of reaching certain stages:
+                        </p>
+
+                        <div class="probability-grid" id="probability-grid" aria-label="Team probability details"></div>
+
+                        <br>
+                        <br>
+                        <hr>
+                        <p>
+                            Of course, this heavily simplified model will not be an accurate predictor for the World Cup. But it's easily-understandable and is good at giving some intuition about counter-intuitive probabilities and statistics.
+                        </p>
+                        <p>
+                            This tool was created by Noel Friedrich. If you have any questions, corrections or feedback, feel
+                            free to contact me at <span style="font-style: italic;">&lt;firstname&gt;.&lt;lastname&gt;@outlook.de</span>
+                            or via the contact form on <a href="https://noel-friedrich.de">my website</a>.
+                        </p>
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const openSidebarButton = document.querySelector(".open-sidebar-button");
+            const closeSidebarButton = document.querySelector(".close-sidebar-button");
+            const sidebarOverlay = document.querySelector(".sidebar-overlay");
+
+            window.onSidebarClose = null;
+
+            function setSidebarOpen(isOpen) {
+                document.body.classList.toggle("sidebar-is-open", isOpen);
+                openSidebarButton.setAttribute("aria-expanded", String(isOpen));
+
+                if (!isOpen && window.onSidebarClose) {
+                    window.onSidebarClose();
+                }
+            }
+
+            openSidebarButton.addEventListener("click", () => setSidebarOpen(true));
+            closeSidebarButton.addEventListener("click", () => setSidebarOpen(false));
+            sidebarOverlay.addEventListener("click", () => setSidebarOpen(false));
+        </script>
+
+        <script src="teams.js?t=5"></script>
+        <script src="barchart.js?t=5"></script>
+        <script src="tournament.js?t=5"></script>
+        <script src="main.js?t=5"></script>
+    </body>
+</html>

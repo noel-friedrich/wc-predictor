@@ -1,0 +1,345 @@
+html {
+    --background-color: white;
+    --sidebar-background-color: white;
+    --sidebar-border-color: #ccc;
+    --header-background-color: white;
+    --main-background-color: white;
+    --text-color: black;
+    --button-background-color: black;
+    --button-text-color: white;
+    --sidebar-width: 400px;
+    --header-height: 64px;
+    --layout-gap: 0;
+    --page-padding: 24px;
+    --transition-duration: 180ms;
+    --content-padding: 30px;
+    --viewport-height: 100vh;
+
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, system-ui, sans-serif;
+    color: var(--text-color);
+    background: var(--background-color);
+}
+
+@supports (height: 100dvh) {
+    html {
+        --viewport-height: 100dvh;
+    }
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, system-ui, sans-serif;
+    background: var(--background-color);
+}
+
+button {
+    font: inherit;
+}
+
+.parent-container-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #f5f5f5;
+}
+
+.parent-container {
+    width: min(1000px, 100vw);
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
+.app-layout {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    height: calc(var(--viewport-height) - var(--header-height));
+    min-height: 0;
+    overflow: hidden;
+}
+
+.sidebar {
+    height: 100%;
+    overflow-y: auto;
+    background: var(--sidebar-background-color);
+    padding: var(--content-padding);
+    padding-bottom: calc(var(--content-padding) + env(safe-area-inset-bottom, 0px));
+    border-right: 1px solid var(--sidebar-border-color);
+}
+
+.close-sidebar-button,
+.open-sidebar-button,
+.reset-strengths-button {
+    cursor: pointer;
+}
+
+.sidebar-overlay {
+    display: none;
+}
+
+.sliders-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 10px;
+}
+
+.sliders-container > label {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 2px;
+    font-size: .9em;
+}
+
+.sliders-container > img {
+    height: 2.6em;
+    grid-row: span 2;
+}
+
+.sliders-container > input {
+    margin-bottom: 10px;
+    touch-action: pan-y;
+}
+
+.close-sidebar-button {
+    display: none;
+}
+
+.open-sidebar-button {
+    display: none;
+}
+
+.reset-strengths-button {
+    display: block;
+    width: 100%;
+    min-height: 48px;
+    margin-top: 16px;
+    border: 0;
+    color: var(--button-text-color);
+    background: var(--button-background-color);
+}
+
+.reset-strengths-button:disabled {
+    cursor: not-allowed;
+    color: #666;
+    background: #d6d6d6;
+}
+
+.page-content {
+    padding: var(--content-padding);
+    padding-bottom: calc(var(--content-padding) + env(safe-area-inset-bottom, 0px));
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    overflow-y: auto;
+    background-color: var(--main-background-color);
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--header-height);
+    padding: 0 var(--page-padding);
+    background: var(--header-background-color);
+    border-bottom: 1px solid var(--sidebar-border-color);
+    position: relative;
+    z-index: 99;
+}
+
+.page-content .svg-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.fixed-games-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: 0.95rem;
+}
+
+.fixed-games-control[hidden] {
+    display: none;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+#simulated-tournament-svg {
+    display: block;
+    width: min(100%, 700px);
+    height: auto;
+    aspect-ratio: 1200 / 760;
+}
+
+.simulation-chart-container {
+    width: 100%;
+    height: 360px;
+    margin-top: 24px;
+}
+
+.simulation-chart-container canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.probability-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.probability-card {
+    display: grid;
+    gap: 10px;
+    padding: 12px;
+    /*border: 1px solid var(--sidebar-border-color);*/
+    background: var(--background-color);
+    scroll-margin-top: 16px;
+}
+
+.probability-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    font-weight: 700;
+}
+
+.probability-card-header img {
+    width: 28px;
+    height: 20px;
+    object-fit: contain;
+    flex: 0 0 auto;
+}
+
+.probability-card-header span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.probability-card dl {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px 10px;
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+.probability-card dt,
+.probability-card dd {
+    margin: 0;
+}
+
+.probability-card dt {
+    color: #444;
+}
+
+.probability-card dd {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+@media (max-width: 767px) {
+    .open-sidebar-button {
+        display: block;
+        width: 100%;
+        min-height: 48px;
+        border: 0;
+        color: var(--button-text-color);
+        background: var(--button-background-color);
+    }
+
+    .app-layout {
+        display: block;
+        height: calc(var(--viewport-height) - var(--header-height));
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .sidebar {
+        position: fixed;
+        z-index: 10;
+        top: var(--header-height);
+        left: 0;
+        width: 85vw;
+        height: calc(var(--viewport-height) - var(--header-height));
+        max-width: 100%;
+        overflow-y: auto;
+        border-right: 1px solid var(--sidebar-border-color);
+        transform: translateX(-100%);
+        transition: transform var(--transition-duration) ease;
+        padding-top: 40px;
+        box-shadow: 0 0px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .sidebar-overlay {
+        position: fixed;
+        z-index: 9;
+        top: var(--header-height);
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: none;
+        width: 100%;
+        border: 0;
+        padding: 0;
+        background: transparent;
+        cursor: default;
+    }
+
+    .sidebar-is-open .sidebar-overlay {
+        display: block;
+    }
+
+    .sidebar-is-open .sidebar {
+        transform: translateX(0);
+    }
+
+    .close-sidebar-button {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border: none;
+        background: var(--sidebar-background-color);
+    }
+
+    .page-header {
+        padding: 0 16px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .simulation-chart-container {
+        height: 320px;
+    }
+
+    .probability-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+}
