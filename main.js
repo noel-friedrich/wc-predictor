@@ -54,6 +54,29 @@ function saveStrengths() {
     localStorage.setItem(savedStrengthsStorageKey, JSON.stringify(strengthsByTeam))
 }
 
+async function loadFixedGameOutcomes() {
+    try {
+        const response = await fetch("api/get_results.php", { cache: "no-store" })
+
+        if (!response.ok) {
+            throw new Error(`Request failed with status ${response.status}`)
+        }
+
+        const results = await response.json()
+
+        if (!Array.isArray(results)) {
+            throw new Error("Expected an array of results")
+        }
+
+        FIXED_GAME_OUTCOMES = results
+            .filter(result => typeof result?.winner === "string" && typeof result?.loser === "string")
+            .map(result => [result.winner, result.loser])
+    } catch (error) {
+        console.error("Could not load fixed game outcomes", error)
+        FIXED_GAME_OUTCOMES = []
+    }
+}
+
 function hasFixedGameOutcomes() {
     return typeof FIXED_GAME_OUTCOMES !== "undefined"
         && Array.isArray(FIXED_GAME_OUTCOMES)
@@ -163,6 +186,8 @@ function initStrengthSliders() {
             saveStrengths()
             recomputeAnalysis()
         })
+
+        renderMath(elements.strengthSliders)
     }
 
     updateResetStrengthsButton()
@@ -445,7 +470,8 @@ function runSimulations(numSimulations=10000) {
     visibleTournament.draw()
 }
 
-function main() {
+async function main() {
+    await loadFixedGameOutcomes()
     initStrengthSliders()
     elements.resetStrengthsButton?.addEventListener("click", resetStrengths)
     initFixedGameOutcomesControl()

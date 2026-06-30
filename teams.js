@@ -98,10 +98,4 @@ const teams = [
     new FootballTeam("Ghana", 3.6, "ghana"),
 ]
 
-const FIXED_GAME_OUTCOMES = [
-    // format: [teamA.isoId, teamB.isoId], teamA beat teamB in the actual match.
-    ["canada", "south_africa"],
-    ["brazil", "japan"],
-    ["paraguay", "germany"], // :( :( :(,
-    ["morocco", "netherlands"], // :(
-]
+let FIXED_GAME_OUTCOMES = []
