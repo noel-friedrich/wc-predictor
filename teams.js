@@ -102,5 +102,6 @@ const FIXED_GAME_OUTCOMES = [
     // format: [teamA.isoId, teamB.isoId], teamA beat teamB in the actual match.
     ["canada", "south_africa"],
     ["brazil", "japan"],
-    ["paraguay", "germany"], // :( :( :(
+    ["paraguay", "germany"], // :( :( :(,
+    ["morocco", "netherlands"], // :(
 ]
