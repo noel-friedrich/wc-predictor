@@ -1,4 +1,4 @@
-# Read a QR by Hand
+# 2026 World Cup Predictor
 
 > A simple web-tool to predict the knockout stage of the 2026 FIFA World Cup  
 > Companion YouTube video: [youtu.be/BjYtM6TFlbc](https://youtu.be/BjYtM6TFlbc)  
